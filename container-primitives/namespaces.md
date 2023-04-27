@@ -2,8 +2,11 @@
 
 ## Resources
 
-- [https://youtu.be/x1npPrzyKfs?t=610](linuxfestnorthwest: Linux Container Primitives: cgroups, namespaces, and more!)
 - `man 7 namespaces`
+- [Redhat: Building a Linux container by hand using namespaces](https://www.redhat.com/sysadmin/building-container-namespaces)
+- [Redhat: Manage containers in namespaces by using nsenter](https://www.redhat.com/sysadmin/container-namespaces-nsenter)
+- [linuxfestnorthwest: Linux Container Primitives: cgroups, namespaces, and more!](https://youtu.be/x1npPrzyKfs?t=610)
+
 
 ## Namespaces
 
