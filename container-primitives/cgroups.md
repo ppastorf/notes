@@ -1,29 +1,41 @@
 # Control groups
 
-- organizes (groups) processes in the system
-- track resource usage by each group of processes
-- ability to allocate, deny, limit, prioritize and monitor resources to each group of tasks
+## Good resources
 
-- cgroups are organized hierarchically, as trees
-  - child cgroups inherit some attributes of their parents
-  - many different hierarchies can exist simultaneously on a system
+- https://www.youtube.com/watch?v=sK5i-N34im8
+- https://www.youtube.com/watch?v=x1npPrzyKfs
+- https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01
 
-- Cgroups is an abstract framework
-  - Subsystems are the concrete implementations
+## Cgroups
 
-- each Subsystem organizes processes independently
-- each gcroup tree is attached to *one or more* subsystems
-- every *PID* is represented exactly once in each subsystem
-- when a new process starts, it begins in the same cgroup as its parent process
+Linux Kernel primitive that organizes (groups) processes in the system in groups
+  - Can have child cgroups, on a tree structure
 
-- cgroups are typically mounted at `/sys/fs/cgroup/`
-  - settings files
-  - stats files
-  - list of PIDs in that  
+Can be used to track resource usage and to manage (allocate, deny, limit, prioritize) resources to each group of tasks
 
-- List cgroups of a particular process: `cat /proc/$PID/cgroup`  
+Cgroups are organized hierarchically
+  - Child cgroups inherit some attributes of their parents
+  - Not a single tree: many different hierarchies can coexist simultaneously on a system, each one attached to a different subsystem 
 
-- Examples of available Subsystems:
+Cgroups is actually an abstract framework, Subsystems are the concrete implementations
+  
+- Each cgroup organizes processes independently
+  - Process A and B could be in the same `cpu` Subsystem cgroup and on different `memory` subsystem cgroups
+- Each cgroup tree is attached to *one or more* subsystems
+  
+Every process belongs to an cgroup. If not, it belongs on the root cgroup for that subsystem.
+  - Every *PID* is represented exactly once in each subsystem
+  - When a new process starts, it begins in the same cgroup as its parent process
+
+Cgroups are typically mounted at `/sys/fs/cgroup/` virtual filesystem. There are files for:
+  - Cgroup settings
+  - Cgroup resources statistics
+  - List of PIDs in that cgroup
+  - Directories are child cgroups
+
+List cgroups of a particular process: `cat /proc/$PID/cgroup`  
+
+Examples of available Subsystems:
   - `cpu`
     - leverages the scheduler to manage CPU time of tasks
   
@@ -42,6 +54,9 @@
   - `memory`
     - sets limits on memory usage by tasks
     - generates reports on memory used by tasks
+
+  - `hugetlb`
+    - limits huge tables usage
 
   - `blkio`
     - sets limits on input/output access to block devices (disks, SSDs, USB)
@@ -62,4 +77,3 @@
     - identifies cgroup membership of tasks
     - can be used for performance analysis
 
-##
