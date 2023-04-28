@@ -2,9 +2,10 @@
 
 ## Good resources
 
-- https://www.youtube.com/watch?v=sK5i-N34im8
-- https://www.youtube.com/watch?v=x1npPrzyKfs
-- https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01
+- [Docker: Cgroups, namespaces, and beyond: what are containers made from?](https://www.youtube.com/watch?v=sK5i-N34im8)
+- [linuxfestnorthwest: Linux Container Primitives: cgroups, namespaces, and more!](https://www.youtube.com/watch?v=x1npPrzyKfs)
+- [Redhat: Introduction on cgroups](https://www.redhat.com/sysadmin/cgroups-part-one)
+- [Redhat: A good documentation of cgroups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/ch01)
 
 ## Cgroups
 

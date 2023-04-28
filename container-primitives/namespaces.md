@@ -3,7 +3,7 @@
 ## Resources
 
 - `man 7 namespaces`
-- [Redhat: Building a Linux container by hand using namespaces](https://www.redhat.com/sysadmin/building-container-namespaces)
+- [Redhat: The 7 most used Linux namespaces](https://www.redhat.com/sysadmin/7-linux-namespaces)
 - [Redhat: Manage containers in namespaces by using nsenter](https://www.redhat.com/sysadmin/container-namespaces-nsenter)
 - [linuxfestnorthwest: Linux Container Primitives: cgroups, namespaces, and more!](https://youtu.be/x1npPrzyKfs?t=610)
 
@@ -41,15 +41,50 @@ Unlike cgroups, namespaces are not to be created through the filesystem
 
 Namespaces can be manipulated using the following syscalls / programs:
 
-- `clone`: creates a new process in a new namespace 
-- `unshare`: a running process moves itself to a new namespace
-- `setns`: sets a task to an existing namespace
-
-Useful programs:
+- `clone`: creates a child process possibly in a new namespace 
+- `unshare`: runs a program in a new namespace
 - `nsenter`: runs a program in an existing namespace 
-- `ip-netns`: manipulate tasks in network namespaces
+- `setns`: sets a task to an existing namespace
+- `ip netns`: manipulate tasks in network namespaces
+- `lsns`: lists namespaces visible
 
-### Examples
+#### Examples
+
+##### nsenter
+Run a (host) command in the network namespace of a running process
+```
+sudo nsenter --target $PID --net $COMMAND
+```
+If $COMMAND is ommited, it enters the default shell
+
+Run a command defined inside a container (we need to enter the mount namespace to see it)
+```
+sudo nsenter --target $PID --mount $CONTAINER_COMMAND
+```
+
+Check processes running inside a container (it must have `ps` binary)
+```
+sudo nsenter --target $PID --pid --mount ps
+```
+
+Run a command in all the namespaces of a running process
+```
+sudo nsenter --target $PID --all $COMMAND
+```
+
+Check the hostname of a container
+```
+sudo nsenter --target $PID --uts hostname
+```
+
+Check the network interfaces of a container
+```
+sudo nsenter --target $PID --net ip a
+```
+
+Check `nsenter --help` for other namespaces
+
+### About some namespaces
 
 **Network namespaces**
 
@@ -61,6 +96,8 @@ Multiple containers can share a nw namespace, such as Kubernetes pods
 
 **Mount namespaces**
 
+[Redhat: The mount namespace](https://www.redhat.com/sysadmin/mount-namespaces)
+
 Can provide a separate view of the filesystem with a different root, hiding the rest of the fs from the processes in the namespace. 
 
 Used to give containers their own filesystem, the container image is mounted as the root filesystem.
@@ -69,9 +106,19 @@ Used to give containers their own filesystem, the container image is mounted as 
 
 **PIDs namespaces**
 
+[Redhat: The PID namespace](https://www.redhat.com/sysadmin/pid-namespace)
+
 Used to isolate the view of PIDs in the system.
 
 A process can have X PID for processes inside his namespace, but Y PID for process outside that namespace.
 
+Two processes can have the same PID if they are in different namespaces.
+
 A process can also be hidden from processes inside certain namespaces
+
+A process can see the PIDs of its children, but not of its parents.
+
+The first process in a new PID namespace becomes the `init` process.
+
+A namespace can see processes from other namespaces as long as they are in the same `mount` namespace, because it depends on what is set at `/proc`
 
